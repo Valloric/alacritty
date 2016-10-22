@@ -39,6 +39,8 @@ extern crate parking_lot;
 extern crate serde;
 extern crate serde_yaml;
 extern crate vte;
+extern crate cpuprofiler;
+
 
 #[macro_use]
 extern crate bitflags;
@@ -73,6 +75,7 @@ use renderer::{QuadRenderer, GlyphCache};
 use sync::FairMutex;
 use term::Term;
 use tty::process_should_exit;
+use cpuprofiler::PROFILER;
 
 /// Channel used by resize handling on mac
 static mut resize_sender: Option<mpsc::Sender<(u32, u32)>> = None;
@@ -226,6 +229,8 @@ fn main() {
         tx
     );
 
+    PROFILER.lock().unwrap().start("/tmp/alacritty.profile").unwrap();
+
     // Main loop
     loop {
         // Wait for something to happen
@@ -242,6 +247,8 @@ fn main() {
             break;
         }
     }
+
+    PROFILER.lock().unwrap().stop().unwrap();
 
     // shutdown
     event_loop_handle.join().ok();

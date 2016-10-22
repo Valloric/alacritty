@@ -20,6 +20,7 @@ serde_derive = "0.8"
 vte = "0.1.2"
 mio = "0.6"
 copypasta = { path = "./copypasta" }
+cpuprofiler = "0.0.2"
 
 [build-dependencies]
 gl_generator = "0.5"
